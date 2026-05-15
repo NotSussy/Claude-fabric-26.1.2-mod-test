@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "orbitalstrike",
+  "version": "${version}",
+  "name": "Orbital Strike",
+  "description": "Adds two Orbital Strike Cannons: a Nuke (ring of TNT) and a Stab Shot (vertical column). Use /orbitalgive to customize.",
+  "authors": ["Player"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.example.orbitalstrike.OrbitalStrikeMod"],
+    "client": ["com.example.orbitalstrike.OrbitalStrikeClient"]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.19.2",
+    "fabric-api": "*",
+    "minecraft": "~26.1.2",
+    "java": ">=25"
+  }
+}
