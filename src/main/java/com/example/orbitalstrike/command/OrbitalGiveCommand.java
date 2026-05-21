@@ -23,7 +23,6 @@ public class OrbitalGiveCommand {
     ) {
         dispatcher.register(
             Commands.literal("orbitalgive")
-                .requires(src -> src.hasPermissionLevel(2))
                 .then(Commands.literal("nuke")
                     .then(Commands.argument("delay_seconds", IntegerArgumentType.integer(0, 300))
                         .executes(ctx -> giveItem(ctx, ModItems.NUKE_CANNON, "Nuke Cannon"))))

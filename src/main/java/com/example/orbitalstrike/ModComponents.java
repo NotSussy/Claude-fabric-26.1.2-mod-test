@@ -5,7 +5,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class ModComponents {
 
