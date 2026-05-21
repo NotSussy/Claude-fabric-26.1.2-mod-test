@@ -6,7 +6,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.item.Item;
 
 public class ModItems {
@@ -17,7 +17,7 @@ public class ModItems {
     static {
         ResourceKey<Item> nukeKey = ResourceKey.create(
             Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(OrbitalStrikeMod.MOD_ID, "nuke_cannon")
+            Identifier.of(OrbitalStrikeMod.MOD_ID, "nuke_cannon")
         );
         NUKE_CANNON = Registry.register(
             BuiltInRegistries.ITEM,
@@ -27,7 +27,7 @@ public class ModItems {
 
         ResourceKey<Item> stabKey = ResourceKey.create(
             Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(OrbitalStrikeMod.MOD_ID, "stab_cannon")
+            Identifier.of(OrbitalStrikeMod.MOD_ID, "stab_cannon")
         );
         STAB_CANNON = Registry.register(
             BuiltInRegistries.ITEM,

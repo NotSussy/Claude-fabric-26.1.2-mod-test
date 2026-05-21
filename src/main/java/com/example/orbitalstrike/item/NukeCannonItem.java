@@ -36,7 +36,7 @@ public class NukeCannonItem extends Item {
         long fireTick = serverLevel.getGameTime() + Math.max(1, delayTicks);
         StrikeScheduler.scheduleNuke(serverLevel, target, fireTick);
 
-        player.getCooldowns().addCooldown(stack.getItem(), 20);
+        player.getCooldowns().addCooldown(stack, 20);
         return InteractionResult.SUCCESS;
     }
 }

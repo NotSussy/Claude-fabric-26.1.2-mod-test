@@ -36,7 +36,7 @@ public class StabShotCannonItem extends Item {
         long fireTick = serverLevel.getGameTime() + Math.max(1, delayTicks);
         StrikeScheduler.scheduleStab(serverLevel, target, fireTick);
 
-        player.getCooldowns().addCooldown(stack.getItem(), 20);
+        player.getCooldowns().addCooldown(stack, 20);
         return InteractionResult.SUCCESS;
     }
 }
