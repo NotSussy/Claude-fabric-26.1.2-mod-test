@@ -13,7 +13,7 @@ public class ModComponents {
     public static final DataComponentType<Integer> STRIKE_DELAY_TICKS =
         Registry.register(
             BuiltInRegistries.DATA_COMPONENT_TYPE,
-            Identifier.of(OrbitalStrikeMod.MOD_ID, "strike_delay_ticks"),
+            Identifier.fromNamespaceAndPath(OrbitalStrikeMod.MOD_ID, "strike_delay_ticks"),
             DataComponentType.<Integer>builder()
                 .persistent(Codec.INT)
                 .networkSynchronized(ByteBufCodecs.INT)

@@ -17,7 +17,7 @@ public class ModItems {
     static {
         ResourceKey<Item> nukeKey = ResourceKey.create(
             Registries.ITEM,
-            Identifier.of(OrbitalStrikeMod.MOD_ID, "nuke_cannon")
+            Identifier.fromNamespaceAndPath(OrbitalStrikeMod.MOD_ID, "nuke_cannon")
         );
         NUKE_CANNON = Registry.register(
             BuiltInRegistries.ITEM,
@@ -27,7 +27,7 @@ public class ModItems {
 
         ResourceKey<Item> stabKey = ResourceKey.create(
             Registries.ITEM,
-            Identifier.of(OrbitalStrikeMod.MOD_ID, "stab_cannon")
+            Identifier.fromNamespaceAndPath(OrbitalStrikeMod.MOD_ID, "stab_cannon")
         );
         STAB_CANNON = Registry.register(
             BuiltInRegistries.ITEM,
