@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld_rod",
   "textures": {
-    "layer0": "orbitalstrike:item/nuke_cannon"
+    "layer0": "minecraft:item/fishing_rod"
   }
 }

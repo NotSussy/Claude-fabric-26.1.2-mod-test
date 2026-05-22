@@ -22,7 +22,7 @@ public class ModItems {
         NUKE_CANNON = Registry.register(
             BuiltInRegistries.ITEM,
             nukeKey,
-            new NukeCannonItem(new Item.Properties().setId(nukeKey).stacksTo(1))
+            new NukeCannonItem(new Item.Properties().setId(nukeKey).durability(1))
         );
 
         ResourceKey<Item> stabKey = ResourceKey.create(
@@ -32,7 +32,7 @@ public class ModItems {
         STAB_CANNON = Registry.register(
             BuiltInRegistries.ITEM,
             stabKey,
-            new StabShotCannonItem(new Item.Properties().setId(stabKey).stacksTo(1))
+            new StabShotCannonItem(new Item.Properties().setId(stabKey).durability(1))
         );
     }
 

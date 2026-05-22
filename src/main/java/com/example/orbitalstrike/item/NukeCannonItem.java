@@ -3,6 +3,7 @@ package com.example.orbitalstrike.item;
 import com.example.orbitalstrike.ModComponents;
 import com.example.orbitalstrike.strike.StrikeScheduler;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -36,7 +37,9 @@ public class NukeCannonItem extends Item {
         long fireTick = serverLevel.getGameTime() + Math.max(1, delayTicks);
         StrikeScheduler.scheduleNuke(serverLevel, target, fireTick);
 
-        player.getCooldowns().addCooldown(stack, 20);
+        if (!player.isCreative()) {
+            stack.hurtAndBreak(1, (ServerLevel) level, (ServerPlayer) player, i -> {});
+        }
         return InteractionResult.SUCCESS;
     }
 }

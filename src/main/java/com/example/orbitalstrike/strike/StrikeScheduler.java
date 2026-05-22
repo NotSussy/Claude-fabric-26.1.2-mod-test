@@ -2,7 +2,6 @@ package com.example.orbitalstrike.strike;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.phys.Vec3;
 
@@ -26,7 +25,6 @@ public class StrikeScheduler {
 
     public static void tick(MinecraftServer server) {
         if (PENDING.isEmpty()) return;
-
         Iterator<PendingStrike> iter = PENDING.iterator();
         while (iter.hasNext()) {
             PendingStrike strike = iter.next();
@@ -44,32 +42,26 @@ public class StrikeScheduler {
         }
     }
 
-    // Spawns a ring of 16 TNT entities around the target, falling from above
+    // 16 TNT drop from 80 blocks above in a ring; fuse 120t (6s) to reach ground
     private static void spawnNukeRing(ServerLevel level, Vec3 center) {
         int count = 16;
         double radius = 5.0;
-        double dropHeight = 80.0;
         for (int i = 0; i < count; i++) {
             double angle = (2.0 * Math.PI * i) / count;
             double x = center.x + radius * Math.cos(angle);
             double z = center.z + radius * Math.sin(angle);
-            spawnTnt(level, x, center.y + dropHeight, z);
+            PrimedTnt tnt = new PrimedTnt(level, x, center.y + 80.0, z, null);
+            tnt.setFuse(120);
+            level.addFreshEntity(tnt);
         }
     }
 
-    // Spawns 10 TNT entities in a vertical column above the target
+    // 15 TNT stacked in a vertical line at cursor; fuse 1t (instant)
     private static void spawnStabColumn(ServerLevel level, Vec3 center) {
-        int count = 10;
-        double startHeight = 20.0;
-        double spacing = 4.0;
-        for (int i = 0; i < count; i++) {
-            spawnTnt(level, center.x, center.y + startHeight + (i * spacing), center.z);
+        for (int i = 0; i < 15; i++) {
+            PrimedTnt tnt = new PrimedTnt(level, center.x, center.y + i, center.z, null);
+            tnt.setFuse(1);
+            level.addFreshEntity(tnt);
         }
-    }
-
-    private static void spawnTnt(ServerLevel level, double x, double y, double z) {
-        PrimedTnt tnt = new PrimedTnt(level, x, y, z, null);
-        tnt.setFuse(40);
-        level.addFreshEntity(tnt);
     }
 }
