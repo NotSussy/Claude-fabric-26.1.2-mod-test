@@ -11,7 +11,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class OrbitalGiveCommand {
@@ -23,31 +22,51 @@ public class OrbitalGiveCommand {
     ) {
         dispatcher.register(
             Commands.literal("orbitalgive")
+                // /orbitalgive nuke <delay> [ring_size]
                 .then(Commands.literal("nuke")
                     .then(Commands.argument("delay_seconds", IntegerArgumentType.integer(0, 300))
-                        .executes(ctx -> giveItem(ctx, ModItems.NUKE_CANNON, "Nuke Cannon"))))
+                        .executes(ctx -> giveNuke(ctx, 5))
+                        .then(Commands.argument("ring_size", IntegerArgumentType.integer(1, 30))
+                            .executes(ctx -> giveNuke(ctx, IntegerArgumentType.getInteger(ctx, "ring_size"))))))
+                // /orbitalgive stab <delay>
                 .then(Commands.literal("stab")
                     .then(Commands.argument("delay_seconds", IntegerArgumentType.integer(0, 300))
-                        .executes(ctx -> giveItem(ctx, ModItems.STAB_CANNON, "Stab Cannon"))))
+                        .executes(ctx -> giveStab(ctx))))
         );
     }
 
-    private static int giveItem(CommandContext<CommandSourceStack> ctx, Item item, String name)
+    private static int giveNuke(CommandContext<CommandSourceStack> ctx, int ringSize)
         throws CommandSyntaxException
     {
         ServerPlayer player = ctx.getSource().getPlayerOrException();
         int delaySecs = IntegerArgumentType.getInteger(ctx, "delay_seconds");
-        int delayTicks = delaySecs * 20;
 
-        ItemStack stack = new ItemStack(item);
-        stack.set(ModComponents.STRIKE_DELAY_TICKS, delayTicks);
+        ItemStack stack = new ItemStack(ModItems.NUKE_CANNON);
+        stack.set(ModComponents.STRIKE_DELAY_TICKS, delaySecs * 20);
+        stack.set(ModComponents.RING_SIZE, ringSize);
 
-        if (!player.getInventory().add(stack)) {
-            player.drop(stack, false);
-        }
+        if (!player.getInventory().add(stack)) player.drop(stack, false);
 
         ctx.getSource().sendSuccess(
-            () -> Component.literal("Given " + name + " with " + delaySecs + "s delay."),
+            () -> Component.literal("Given Orbital Nuke Cannon — delay: " + delaySecs + "s, ring size: " + ringSize),
+            false
+        );
+        return 1;
+    }
+
+    private static int giveStab(CommandContext<CommandSourceStack> ctx)
+        throws CommandSyntaxException
+    {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        int delaySecs = IntegerArgumentType.getInteger(ctx, "delay_seconds");
+
+        ItemStack stack = new ItemStack(ModItems.STAB_CANNON);
+        stack.set(ModComponents.STRIKE_DELAY_TICKS, delaySecs * 20);
+
+        if (!player.getInventory().add(stack)) player.drop(stack, false);
+
+        ctx.getSource().sendSuccess(
+            () -> Component.literal("Given Orbital Stab Cannon — delay: " + delaySecs + "s"),
             false
         );
         return 1;

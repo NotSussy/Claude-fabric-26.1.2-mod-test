@@ -13,14 +13,14 @@ public class StrikeScheduler {
 
     private static final List<PendingStrike> PENDING = new ArrayList<>();
 
-    private record PendingStrike(ServerLevel level, Vec3 position, StrikeType type, long fireTick) {}
+    private record PendingStrike(ServerLevel level, Vec3 position, StrikeType type, long fireTick, int ringSize) {}
 
-    public static void scheduleNuke(ServerLevel level, Vec3 position, long fireTick) {
-        PENDING.add(new PendingStrike(level, position, StrikeType.NUKE, fireTick));
+    public static void scheduleNuke(ServerLevel level, Vec3 position, long fireTick, int ringSize) {
+        PENDING.add(new PendingStrike(level, position, StrikeType.NUKE, fireTick, ringSize));
     }
 
     public static void scheduleStab(ServerLevel level, Vec3 position, long fireTick) {
-        PENDING.add(new PendingStrike(level, position, StrikeType.STAB, fireTick));
+        PENDING.add(new PendingStrike(level, position, StrikeType.STAB, fireTick, 0));
     }
 
     public static void tick(MinecraftServer server) {
@@ -37,15 +37,15 @@ public class StrikeScheduler {
 
     private static void executeStrike(PendingStrike strike) {
         switch (strike.type()) {
-            case NUKE -> spawnNukeRing(strike.level(), strike.position());
+            case NUKE -> spawnNukeRing(strike.level(), strike.position(), strike.ringSize());
             case STAB -> spawnStabColumn(strike.level(), strike.position());
         }
     }
 
     // 16 TNT drop from 80 blocks above in a ring; fuse 120t (6s) to reach ground
-    private static void spawnNukeRing(ServerLevel level, Vec3 center) {
+    private static void spawnNukeRing(ServerLevel level, Vec3 center, int ringSize) {
         int count = 16;
-        double radius = 5.0;
+        double radius = ringSize;
         for (int i = 0; i < count; i++) {
             double angle = (2.0 * Math.PI * i) / count;
             double x = center.x + radius * Math.cos(angle);

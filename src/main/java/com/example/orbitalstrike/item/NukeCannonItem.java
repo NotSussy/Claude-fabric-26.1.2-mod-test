@@ -16,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 public class NukeCannonItem extends Item {
 
     private static final int DEFAULT_DELAY_TICKS = 200;
+    private static final int DEFAULT_RING_SIZE = 5;
 
     public NukeCannonItem(Properties properties) {
         super(properties);
@@ -23,19 +24,18 @@ public class NukeCannonItem extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        if (level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        }
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
 
         ItemStack stack = player.getItemInHand(hand);
         int delayTicks = stack.getOrDefault(ModComponents.STRIKE_DELAY_TICKS, DEFAULT_DELAY_TICKS);
+        int ringSize   = stack.getOrDefault(ModComponents.RING_SIZE, DEFAULT_RING_SIZE);
 
         HitResult hit = player.pick(200.0, 0.0f, false);
         Vec3 target = hit.getLocation();
 
         ServerLevel serverLevel = (ServerLevel) level;
         long fireTick = serverLevel.getGameTime() + Math.max(1, delayTicks);
-        StrikeScheduler.scheduleNuke(serverLevel, target, fireTick);
+        StrikeScheduler.scheduleNuke(serverLevel, target, fireTick, ringSize);
 
         if (!player.isCreative()) {
             stack.hurtAndBreak(1, (ServerLevel) level, (ServerPlayer) player, i -> {});
