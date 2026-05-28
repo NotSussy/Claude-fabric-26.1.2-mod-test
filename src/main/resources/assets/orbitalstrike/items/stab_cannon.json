@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/fishing_rod"
+    "model": "orbitalstrike:item/stab_cannon"
   }
 }
