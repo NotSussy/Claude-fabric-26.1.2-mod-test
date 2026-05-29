@@ -3,6 +3,7 @@ package com.example.orbitalstrike.strike;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class StrikeScheduler {
     // Spawn `ringCount` concentric rings of TNT falling from 80 blocks above; fuse 120t (6s) to reach ground
     private static void spawnNukeRing(ServerLevel level, Vec3 center, int ringCount) {
         for (int ring = 1; ring <= ringCount; ring++) {
-            double radius = ring * 5.0;
+            double radius = ring * 10.0;
             int count = Math.max(8, (int) (2.0 * Math.PI * radius / 3.0));
             for (int i = 0; i < count; i++) {
                 double angle = (2.0 * Math.PI * i) / count;
@@ -58,12 +59,10 @@ public class StrikeScheduler {
         }
     }
 
-    // 15 TNT stacked in a vertical line at cursor; fuse 1t (instant)
+    // 15 direct explosions stacked vertically; power 8 (2x vanilla TNT) for instant, high-damage strike
     private static void spawnStabColumn(ServerLevel level, Vec3 center) {
         for (int i = 0; i < 15; i++) {
-            PrimedTnt tnt = new PrimedTnt(level, center.x, center.y + i, center.z, null);
-            tnt.setFuse(1);
-            level.addFreshEntity(tnt);
+            level.explode(null, center.x, center.y + i, center.z, 8.0f, Level.ExplosionInteraction.TNT);
         }
     }
 }
