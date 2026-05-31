@@ -47,9 +47,11 @@ public class StrikeScheduler {
     private static void spawnNukeRing(ServerLevel level, Vec3 center, int ringCount) {
         for (int ring = 1; ring <= ringCount; ring++) {
             double radius = ring * 3.0;
-            int count = Math.max(16, (int) (2.0 * Math.PI * radius / 1.5));
+            int rawCount = (int) Math.max(16, 2.0 * Math.PI * radius / 1.5);
+            int count = ((rawCount + 7) / 8) * 8; // round up to multiple of 8 for symmetry
+            double angleOffset = (ring % 2 == 0) ? Math.PI / count : 0; // stagger alternate rings
             for (int i = 0; i < count; i++) {
-                double angle = (2.0 * Math.PI * i) / count;
+                double angle = angleOffset + (2.0 * Math.PI * i) / count;
                 double x = center.x + radius * Math.cos(angle);
                 double z = center.z + radius * Math.sin(angle);
                 PrimedTnt tnt = new PrimedTnt(level, x, center.y + 80.0, z, null);
