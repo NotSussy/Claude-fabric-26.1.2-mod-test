@@ -46,8 +46,8 @@ public class StrikeScheduler {
     // Spawn `ringCount` concentric rings of TNT falling from 80 blocks above; fuse 120t (6s) to reach ground
     private static void spawnNukeRing(ServerLevel level, Vec3 center, int ringCount) {
         for (int ring = 1; ring <= ringCount; ring++) {
-            double radius = ring * 6.0;
-            int count = Math.max(24, (int) (2.0 * Math.PI * radius / 2.0));
+            double radius = ring * 8.0;
+            int count = Math.max(20, (int) (2.0 * Math.PI * radius / 2.5));
             for (int i = 0; i < count; i++) {
                 double angle = (2.0 * Math.PI * i) / count;
                 double x = center.x + radius * Math.cos(angle);
