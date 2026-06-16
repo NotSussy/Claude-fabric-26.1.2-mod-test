@@ -53,6 +53,10 @@ public class StrikeScheduler {
                 double x = center.x + radius * Math.cos(angle);
                 double z = center.z + radius * Math.sin(angle);
                 PrimedTnt tnt = new PrimedTnt(level, x, center.y + 80.0, z, null);
+                // PrimedTnt's constructor adds a random horizontal velocity kick that
+                // scatters the ring; zero it so each TNT falls straight onto its exact spot.
+                tnt.setDeltaMovement(0.0, 0.0, 0.0);
+                tnt.setPos(x, center.y + 80.0, z);
                 tnt.setFuse(120);
                 level.addFreshEntity(tnt);
             }
