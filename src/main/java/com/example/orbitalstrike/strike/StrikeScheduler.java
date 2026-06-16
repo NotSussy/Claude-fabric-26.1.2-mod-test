@@ -46,19 +46,20 @@ public class StrikeScheduler {
     // Spawn `ringCount` concentric rings of TNT falling from 80 blocks above; fuse 120t (6s) to reach ground
     private static void spawnNukeRing(ServerLevel level, Vec3 center, int ringCount) {
         for (int ring = 1; ring <= ringCount; ring++) {
-            double radius = ring * 5.0;
+            double radius = ring * 3.0;
             int count = (int) (2.0 * Math.PI * radius / 1.5);
             for (int i = 0; i < count; i++) {
                 double angle = (2.0 * Math.PI * i) / count;
                 double x = center.x + radius * Math.cos(angle);
                 double z = center.z + radius * Math.sin(angle);
-                PrimedTnt tnt = new PrimedTnt(level, x, center.y + 80.0, z, null);
-                // PrimedTnt's constructor adds a random horizontal velocity kick that
-                // scatters the ring; zero it so each TNT falls straight onto its exact spot.
-                tnt.setDeltaMovement(0.0, 0.0, 0.0);
-                tnt.setPos(x, center.y + 80.0, z);
-                tnt.setFuse(120);
-                level.addFreshEntity(tnt);
+                // Spawn 2 TNT per spot for double damage; slight Y offset so they don't merge into one
+                for (int layer = 0; layer < 2; layer++) {
+                    PrimedTnt tnt = new PrimedTnt(level, x, center.y + 80.0 + layer, z, null);
+                    tnt.setDeltaMovement(0.0, 0.0, 0.0);
+                    tnt.setPos(x, center.y + 80.0 + layer, z);
+                    tnt.setFuse(120);
+                    level.addFreshEntity(tnt);
+                }
             }
         }
     }
