@@ -45,6 +45,8 @@ public class StrikeScheduler {
 
     // Spawn `ringCount` concentric rings of TNT falling from 80 blocks above; fuse 120t (6s) to reach ground
     private static void spawnNukeRing(ServerLevel level, Vec3 center, int ringCount) {
+        // Center TNT so the nuke has a core
+        spawnNukeTnt(level, center.x, center.y, center.z);
         for (int ring = 1; ring <= ringCount; ring++) {
             double radius = ring * 3.0;
             int count = (int) (2.0 * Math.PI * radius / 1.5);
@@ -52,16 +54,21 @@ public class StrikeScheduler {
                 double angle = (2.0 * Math.PI * i) / count;
                 double x = center.x + radius * Math.cos(angle);
                 double z = center.z + radius * Math.sin(angle);
-                // Spawn 2 TNT per spot for double damage; slight Y offset so they don't merge into one
-                for (int layer = 0; layer < 2; layer++) {
-                    PrimedTnt tnt = new PrimedTnt(level, x, center.y + 80.0 + layer, z, null);
-                    tnt.setDeltaMovement(0.0, 0.0, 0.0);
-                    tnt.setPos(x, center.y + 80.0 + layer, z);
-                    tnt.setFuse(120);
-                    level.addFreshEntity(tnt);
-                }
+                spawnNukeTnt(level, x, center.y, z);
             }
         }
+    }
+
+    // Drop a single TNT straight down from 80 blocks above the given ground point
+    private static void spawnNukeTnt(ServerLevel level, double x, double groundY, double z) {
+        double spawnY = groundY + 80.0;
+        PrimedTnt tnt = new PrimedTnt(level, x, spawnY, z, null);
+        // PrimedTnt's constructor adds a random horizontal velocity kick that
+        // scatters the ring; zero it so each TNT falls straight onto its exact spot.
+        tnt.setDeltaMovement(0.0, 0.0, 0.0);
+        tnt.setPos(x, spawnY, z);
+        tnt.setFuse(120);
+        level.addFreshEntity(tnt);
     }
 
     // 15 direct explosions stacked vertically; power 8 (2x vanilla TNT) for instant, high-damage strike
