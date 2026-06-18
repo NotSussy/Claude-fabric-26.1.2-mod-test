@@ -3,7 +3,6 @@ package com.example.orbitalstrike.strike;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -71,10 +70,16 @@ public class StrikeScheduler {
         level.addFreshEntity(tnt);
     }
 
-    // 15 direct explosions stacked vertically; power 8 (2x vanilla TNT) for instant, high-damage strike
+    // Drill a column of TNT straight down from cursor to bedrock (Y=-64), detonating top-to-bottom
     private static void spawnStabColumn(ServerLevel level, Vec3 center) {
-        for (int i = 0; i < 15; i++) {
-            level.explode(null, center.x, center.y + i, center.z, 8.0f, Level.ExplosionInteraction.TNT);
+        int depth = (int) (center.y - (-64)); // blocks from cursor down to bedrock
+        for (int i = 0; i < depth; i++) {
+            double y = center.y - i;
+            PrimedTnt tnt = new PrimedTnt(level, center.x, y, center.z, null);
+            tnt.setDeltaMovement(0.0, 0.0, 0.0);
+            tnt.setPos(center.x, y, center.z);
+            tnt.setFuse(i * 2 + 1); // stagger top-to-bottom so they chain downward
+            level.addFreshEntity(tnt);
         }
     }
 }
